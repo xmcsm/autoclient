@@ -5,6 +5,8 @@ BASEDIR = os.path.dirname(os.path.dirname(__file__))
 
 MODE='agent'
 
+CLIENTIP='192.168.56.1'
+
 DEBUG = True
 
 PLUGINS_DICT = {

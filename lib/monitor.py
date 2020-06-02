@@ -67,8 +67,8 @@ class Monitor(object):
     def disk(self):
         info = psutil.disk_partitions()
         # 列表推导式
-        data = [
-            dict(
+        data = {
+            v.device:dict(
                 device=v.device,
                 mountpoint=v.mountpoint,
                 fstype=v.fstype,
@@ -79,7 +79,7 @@ class Monitor(object):
                 }
             )
             for v in info if v.fstype != ''
-        ]
+        }
         return data
 
     # 网络信息
@@ -98,8 +98,8 @@ class Monitor(object):
             for k,v in addrs.items()
         }
         io = psutil.net_io_counters(pernic=True)
-        data = [
-            dict(
+        data ={
+            addrs_info[k]['address']:dict(
                 name=k,
                 bytes_sent=v.bytes_sent,
                 bytes_recv = v.bytes_recv,
@@ -108,7 +108,7 @@ class Monitor(object):
                 **addrs_info[k]
             )
             for k,v in io.items()
-        ]
+        }
         return data
 
     # 时间戳转换时间格式

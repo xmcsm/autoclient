@@ -1,6 +1,5 @@
 import os
 from lib.conf.conf import setting
-from lib.monitor import Monitor
 from .boardinfo import Board
 from .basicinfo import Basic
 
@@ -10,8 +9,9 @@ class Hardware:
 
         # basic = Monitor().system()
         basic = Basic().process(command,debug)
+        result['basic'] = basic
         if basic['os_platform'] == 'linux':
-            result['basic'] = basic
+
             result['board'] = Board().process(command,debug)
 
             if debug:
@@ -19,6 +19,8 @@ class Hardware:
             else:
                 output = command('cat /proc/cpuinfo')
             result['cpu'] = self.parseCpu(output)
+
+
         # 处理磁盘信息
         return result
 
