@@ -7,7 +7,7 @@ MODE='agent'
 
 CLIENTIP='192.168.56.1'
 
-DEBUG = True
+DEBUG = False
 
 PLUGINS_DICT = {
     #'Basic':'src.plugins.basicinfo.Basic',
