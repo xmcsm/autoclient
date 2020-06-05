@@ -2,6 +2,10 @@ import os
 from lib.conf.conf import setting
 from .boardinfo import Board
 from .basicinfo import Basic
+from lib.monitor import Monitor
+from lib import winmonitor
+import psutil
+import wmi
 
 class Hardware:
     def process(self, command, debug):
@@ -10,7 +14,8 @@ class Hardware:
         # basic = Monitor().system()
         basic = Basic().process(command,debug)
         result['basic'] = basic
-        if basic['os_platform'] == 'linux':
+        cpudata = {}
+        if basic['os_platform'] == 'Linux':
 
             result['board'] = Board().process(command,debug)
 
@@ -18,9 +23,14 @@ class Hardware:
                 output = open(os.path.join(setting.BASEDIR, 'files/cpu.out'), 'r', encoding='utf8').read()
             else:
                 output = command('cat /proc/cpuinfo')
-            result['cpu'] = self.parseCpu(output)
-
-
+            cpudata = self.parseCpu(output)
+        elif basic['os_platform'] == 'Windows':
+            cpudata = winmonitor.printCPU()
+            cpudata['cpu_count'] = psutil.cpu_count(logical=True)
+            result['board'] = winmonitor.printMain_board()
+        result['cpu'] = cpudata
+        info = psutil.virtual_memory()
+        result['mem'] = Monitor().bytes_to_gb(info.total)
         # 处理磁盘信息
         return result
 

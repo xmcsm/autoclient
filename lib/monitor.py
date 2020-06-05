@@ -1,6 +1,7 @@
 # _*_ coding:utf-8 _*_
 import psutil,datetime
 import platform
+from pprint import pprint
 
 class Monitor(object):
     def bytes_to_gb(self,data,key=''):
@@ -98,6 +99,7 @@ class Monitor(object):
             for k,v in addrs.items()
         }
         io = psutil.net_io_counters(pernic=True)
+        status = psutil.net_if_stats()
         data ={
             addrs_info[k]['address']:dict(
                 name=k,
@@ -107,7 +109,7 @@ class Monitor(object):
                 packets_recv = v.packets_recv,
                 **addrs_info[k]
             )
-            for k,v in io.items()
+            for k,v in io.items() if status[k].isup == True
         }
         return data
 
@@ -144,4 +146,13 @@ if __name__ == '__main__':
         print(m.cpu())
         time.sleep(1)
     '''
-    print(m.mem())
+    # pprint(m.net())
+
+    print(psutil.net_io_counters(pernic=True))
+
+    netsatus = psutil.net_if_stats()
+    for k,v in netsatus.items():
+        if v.isup == True:
+            print(k)
+
+

@@ -11,7 +11,7 @@ class PluginsManager():
 
     def execute(self):
         response = {}
-        response['CLIENTIP'] = setting.CLIENTIP
+        response['CLIENTIP'] = setting.CLIENT_IP
         for k,v in self.plugins_dict.items():
             ret = {'status':None,'data':None}
             try:
