@@ -3,7 +3,7 @@ from lib.conf.conf import setting
 from .boardinfo import Board
 from .basicinfo import Basic
 from lib.monitor import Monitor
-from lib import winmonitor
+
 import psutil
 import wmi
 
@@ -25,6 +25,7 @@ class Hardware:
                 output = command('cat /proc/cpuinfo')
             cpudata = self.parseCpu(output)
         elif basic['os_platform'] == 'Windows':
+            from lib import winmonitor
             cpudata = winmonitor.printCPU()
             cpudata['cpu_count'] = psutil.cpu_count(logical=True)
             result['board'] = winmonitor.getBoard()
