@@ -3,9 +3,8 @@ from lib.conf.conf import setting
 from .boardinfo import Board
 from .basicinfo import Basic
 from lib.monitor import Monitor
-
 import psutil
-import wmi
+
 
 class Hardware:
     def process(self, command, debug):
