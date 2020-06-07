@@ -27,7 +27,7 @@ class Hardware:
         elif basic['os_platform'] == 'Windows':
             cpudata = winmonitor.printCPU()
             cpudata['cpu_count'] = psutil.cpu_count(logical=True)
-            result['board'] = winmonitor.printMain_board()
+            result['board'] = winmonitor.getBoard()
         result['cpu'] = cpudata
         info = psutil.virtual_memory()
         result['mem'] = Monitor().bytes_to_gb(info.total)

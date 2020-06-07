@@ -17,7 +17,6 @@ if __name__ == '__main__':
     logger=logging.getLogger('接口调用')
     while True:
         res = PluginsManager().execute()
-        pprint(res)
         logger.info(res)
         response = requests.post('http://{0}:{1}/asset/'.format(setting.SERVER_IP,setting.SERVER_PORT), data=json.dumps(res))
         logger.info(response.status_code)

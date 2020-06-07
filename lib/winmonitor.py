@@ -3,6 +3,18 @@ import os, sys
 import wmi
 c = wmi.WMI()
 
+def getBoard():
+    boards = {}
+    for board in c.Win32_ComputerSystem():
+        boards['Product Name'] = board.SystemFamily
+    for board_id in c.Win32_BaseBoard():
+        boards['UUID'] = board_id.qualifiers['UUID'][1:-1]  # 主板UUID,有的主板这部分信息取到为空值，ffffff-ffffff这样的
+        if board_id.SerialNumber.strip() == '':
+            boards['Serial Number'] = board_id.ConfigOptions[2]
+        else:
+            boards['Serial Number'] = board_id.SerialNumber  # 主板序列号
+        boards['Manufacturer'] = board_id.Manufacturer  # 主板生产品牌厂家
+    return boards
 
 # 处理器
 def printCPU():
@@ -25,10 +37,13 @@ def printCPU():
 # 主板
 def printMain_board():
     boards = {}
-    # print len(c.Win32_BaseBoard()):
+    # print(c.Win32_BaseBoard())
     for board_id in c.Win32_BaseBoard():
         boards['UUID'] = board_id.qualifiers['UUID'][1:-1]  # 主板UUID,有的主板这部分信息取到为空值，ffffff-ffffff这样的
-        boards['Serial Number'] = board_id.SerialNumber  # 主板序列号
+        if board_id.SerialNumber.strip() == '':
+            boards['Serial Number'] = board_id.ConfigOptions[2]
+        else:
+            boards['Serial Number'] = board_id.SerialNumber  # 主板序列号
         boards['Manufacturer'] = board_id.Manufacturer  # 主板生产品牌厂家
         boards['Product Name'] = board_id.Product  # 主板型号
     print (boards)
@@ -46,6 +61,7 @@ def printBIOS():
         tmpmsg['ReleaseDate'] = bios_id.ReleaseDate  # BIOS释放日期
         tmpmsg['SMBIOSBIOSVersion'] = bios_id.SMBIOSBIOSVersion  # 系统管理规范版本
         bioss.append(tmpmsg)
+        print(bios_id)
     print (bioss)
     return bioss
 
@@ -118,6 +134,11 @@ def main():
     printMacAddress()
     printBattery()
 
-
+from datetime import datetime
 if __name__ == '__main__':
-    main()
+    timeStamp = datetime.now()
+    # 1590989507
+    dateArray = datetime.fromtimestamp(1590989507)
+    otherStyleTime = dateArray.strftime("%Y-%m-%d %H:%M:%S")
+    print(otherStyleTime)
+
